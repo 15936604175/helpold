@@ -1,0 +1,92 @@
+[
+  {
+    "id": "test-sb202h1macomqi0twyh",
+    "user_id": "test-6iin6vug7hemqi0twya",
+    "latitude": 39.908,
+    "longitude": 116.4085,
+    "tracking_mode": "manual",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.753Z"
+  },
+  {
+    "id": "test-tijqgy879gmqi0twyj",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.9042,
+    "longitude": 116.4074,
+    "tracking_mode": "auto",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.755Z"
+  },
+  {
+    "id": "test-qt37fqfg97omqi0twyl",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 40,
+    "longitude": 117,
+    "tracking_mode": "auto",
+    "is_outside_geofence": 1,
+    "created_at": "2026-06-17T12:02:17.757Z"
+  },
+  {
+    "id": "test-l9b42e53yfhmqi0twyo",
+    "user_id": "test-6iin6vug7hemqi0twya",
+    "latitude": 39.908,
+    "longitude": 116.4085,
+    "tracking_mode": "scheduled",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.760Z"
+  },
+  {
+    "id": "test-3cavnzx2jwdmqi0twyt",
+    "user_id": "test-6iin6vug7hemqi0twya",
+    "latitude": 39.909,
+    "longitude": 116.409,
+    "tracking_mode": "requested",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.765Z"
+  },
+  {
+    "id": "test-kqq5e8n1atmqi0twz0",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.9042,
+    "longitude": 116.4074,
+    "tracking_mode": "continuous",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.772Z"
+  },
+  {
+    "id": "test-d68frhvtnsbmqi0twz2",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.9052,
+    "longitude": 116.4074,
+    "tracking_mode": "continuous",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.774Z"
+  },
+  {
+    "id": "test-fhaabpxzd0wmqi0twz4",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.906200000000005,
+    "longitude": 116.4074,
+    "tracking_mode": "continuous",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.776Z"
+  },
+  {
+    "id": "test-q1zy7h9cdonmqi0twz6",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.9072,
+    "longitude": 116.4074,
+    "tracking_mode": "continuous",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.778Z"
+  },
+  {
+    "id": "test-y1rvdm80ytemqi0twz7",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.9082,
+    "longitude": 116.4074,
+    "tracking_mode": "continuous",
+    "is_outside_geofence": 0,
+    "created_at": "2026-06-17T12:02:17.779Z"
+  }
+]

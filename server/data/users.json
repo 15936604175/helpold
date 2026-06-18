@@ -1,0 +1,53 @@
+[
+  {
+    "id": "test-dz12dmjopuhmqi0twy7",
+    "phone": "13800138001",
+    "nickname": "测试老人",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "role": "seeker",
+    "disability_type": "老年痴呆",
+    "disability_detail": null,
+    "emergency_contact_name": null,
+    "emergency_contact_phone": null,
+    "location_auth": 1,
+    "auto_consent": 1,
+    "continuous_tracking": 1,
+    "tracking_interval": 30,
+    "geofence_radius": 500,
+    "created_at": "2026-06-17T12:02:17.743Z"
+  },
+  {
+    "id": "test-6iin6vug7hemqi0twya",
+    "phone": "13800138002",
+    "nickname": "志愿者李",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "role": "helper",
+    "disability_type": null,
+    "disability_detail": null,
+    "emergency_contact_name": null,
+    "emergency_contact_phone": null,
+    "location_auth": 1,
+    "auto_consent": 0,
+    "continuous_tracking": 0,
+    "tracking_interval": 600,
+    "geofence_radius": 500,
+    "created_at": "2026-06-17T12:02:17.746Z"
+  },
+  {
+    "id": "test-jb1lsakq36mqi0twyd",
+    "phone": "13800138003",
+    "nickname": "家属小王",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "role": "guardian",
+    "disability_type": null,
+    "disability_detail": null,
+    "emergency_contact_name": null,
+    "emergency_contact_phone": null,
+    "location_auth": 1,
+    "auto_consent": 0,
+    "continuous_tracking": 0,
+    "tracking_interval": 600,
+    "geofence_radius": 500,
+    "created_at": "2026-06-17T12:02:17.749Z"
+  }
+]

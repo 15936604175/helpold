@@ -1,0 +1,29 @@
+[
+  {
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.9082,
+    "longitude": 116.4074,
+    "address": "更新位置",
+    "location_source": "continuous",
+    "accuracy": 30,
+    "updated_at": "2026-06-17T12:02:17.778Z"
+  },
+  {
+    "user_id": "test-6iin6vug7hemqi0twya",
+    "latitude": 39.909,
+    "longitude": 116.409,
+    "address": "更新位置",
+    "location_source": "requested",
+    "accuracy": 30,
+    "updated_at": "2026-06-17T12:02:17.764Z"
+  },
+  {
+    "user_id": "test-jb1lsakq36mqi0twyd",
+    "latitude": 39.9042,
+    "longitude": 116.4074,
+    "address": "测试位置",
+    "location_source": "init",
+    "accuracy": 50,
+    "updated_at": "2026-06-17T12:02:17.750Z"
+  }
+]

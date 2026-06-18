@@ -1,0 +1,11 @@
+[
+  {
+    "id": "test-vb014gqippfmqi0twyl",
+    "user_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 40,
+    "longitude": 117,
+    "alert_type": "exit",
+    "notified": true,
+    "created_at": "2026-06-17T12:02:17.757Z"
+  }
+]

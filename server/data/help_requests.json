@@ -1,0 +1,14 @@
+[
+  {
+    "id": "test-ljj2r2sqqd8mqi0twyo",
+    "seeker_id": "test-dz12dmjopuhmqi0twy7",
+    "latitude": 39.9042,
+    "longitude": 116.4074,
+    "reason": "老人摔倒",
+    "status": "accepted",
+    "stage": "filtering",
+    "created_at": "2026-06-17T12:02:17.761Z",
+    "accepted_by": "test-6iin6vug7hemqi0twya",
+    "resolved_at": "2026-06-17T12:02:17.767Z"
+  }
+]

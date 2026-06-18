@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>互助SOS - 紧急求助平台（测试版）</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+h1 { text-align: center; color: #e74c3c; margin-bottom: 10px; }
+.subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+
+.panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; }
+.panel { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+.panel h2 { font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 8px; }
+.panel h2 .badge { font-size: 12px; background: #e74c3c; color: white; padding: 2px 8px; border-radius: 10px; }
+.panel h2 .badge.helper { background: #3498db; }
+.panel h2 .badge.guardian { background: #2ecc71; }
+
+.form-group { margin-bottom: 12px; }
+label { display: block; font-size: 13px; color: #555; margin-bottom: 4px; }
+input, select, textarea { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+input:focus, select:focus { outline: none; border-color: #3498db; }
+
+.btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+.btn-primary { background: #e74c3c; color: white; }
+.btn-primary:hover { background: #c0392b; }
+.btn-blue { background: #3498db; color: white; }
+.btn-blue:hover { background: #2980b9; }
+.btn-green { background: #2ecc71; color: white; }
+.btn-green:hover { background: #27ae60; }
+.btn-gray { background: #95a5a6; color: white; }
+.btn-gray:hover { background: #7f8c8d; }
+.btn-warning { background: #f39c12; color: white; }
+.btn-warning:hover { background: #d68910; }
+.btn-large { padding: 15px 30px; font-size: 16px; width: 100%; }
+.btn-small { padding: 5px 12px; font-size: 12px; }
+
+.sos-btn { background: #e74c3c; color: white; font-size: 24px; padding: 30px; border-radius: 50%; width: 150px; height: 150px; margin: 0 auto; display: block; border: 8px solid #f1c40f; cursor: pointer; font-weight: bold; animation: pulse 2s infinite; }
+.sos-btn:hover { background: #c0392b; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+.info-box { background: #ecf0f1; padding: 10px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; }
+.info-box.success { background: #d4edda; color: #155724; }
+.info-box.error { background: #f8d7da; color: #721c24; }
+.info-box.warning { background: #fff3cd; color: #856404; }
+
+.list { max-height: 300px; overflow-y: auto; }
+.list-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+.list-item:last-child { border-bottom: none; }
+.list-item .meta { color: #888; font-size: 11px; margin-top: 4px; }
+
+.tracking-status { text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px; margin: 10px 0; }
+.online-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #95a5a6; margin-right: 5px; }
+.online-indicator.online { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+
+.row { display: flex; gap: 10px; margin-bottom: 10px; }
+.row > * { flex: 1; }
+.row-gap { gap: 8px; }
+
+.big-display { text-align: center; font-size: 28px; color: #e74c3c; font-weight: bold; padding: 20px; }
+.small-text { font-size: 12px; color: #888; }
+
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.notification { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999; animation: slideIn 0.3s; max-width: 400px; }
+.notification.success { background: #2ecc71; }
+.notification.error { background: #e74c3c; }
+.notification.info { background: #3498db; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+.coord-display { font-family: monospace; font-size: 12px; color: #666; background: #f8f9fa; padding: 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🆘 互助SOS紧急求助平台</h1>
+  <p class="subtitle">老人、残疾人紧急求助 · 附近帮助者响应 · 老年痴呆患者持续追踪</p>
+
+  <div class="panels">
+
+    <!-- 求助者端（老人/残疾人） -->
+    <div class="panel">
+      <h2>求助者端 <span class="badge">Seeker</span></h2>
+      <div class="info-box">注册为需要帮助的用户（老人/盲人/老年痴呆患者）</div>
+
+      <div class="form-group">
+        <label>手机号</label>
+        <input type="text" id="seeker-phone" placeholder="例如 13800138000" value="13811110001">
+      </div>
+      <div class="form-group">
+        <label>昵称</label>
+        <input type="text" id="seeker-nickname" placeholder="张叔叔" value="张叔叔">
+      </div>
+      <div class="form-group">
+        <label>残障类型</label>
+        <select id="seeker-disability">
+          <option value="老年痴呆">老年痴呆</option>
+          <option value="盲人">盲人</option>
+          <option value="聋哑">聋哑</option>
+          <option value="肢体残疾">肢体残疾</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="row">
+        <button class="btn btn-primary" onclick="registerSeeker()">注册求助者</button>
+        <button class="btn btn-blue" onclick="loginSeeker()">已注册?登录</button>
+      </div>
+
+      <div id="seeker-section" style="display:none; margin-top:20px;">
+        <div class="info-box success" id="seeker-info"></div>
+
+        <h3 style="margin:15px 0 10px; font-size:15px;">📍 我的位置（测试用）</h3>
+        <div class="form-group">
+          <label>纬度</label>
+          <input type="number" id="seeker-lat" step="0.0001" value="39.9042">
+        </div>
+        <div class="form-group">
+          <label>经度</label>
+          <input type="number" id="seeker-lon" step="0.0001" value="116.4074">
+        </div>
+        <button class="btn btn-gray btn-small" onclick="reportSeekerLocation()">上报位置</button>
+
+        <h3 style="margin:20px 0 10px; font-size:15px;">🆘 SOS 一键求助</h3>
+        <button class="sos-btn" onclick="triggerSOS()">SOS<br>紧急求助</button>
+        <div class="info-box warning" style="margin-top:15px; font-size:12px;">
+          点击后：<br>1. 发送位置到服务器<br>2. 阶段1：筛选附近5km帮助者，请求他们上报位置<br>3. 阶段2：根据上报的精确位置（2km内）发送求救信息<br>4. 帮助者接单后通知您
+        </div>
+      </div>
+    </div>
+
+    <!-- 帮助者端 -->
+    <div class="panel">
+      <h2>帮助者端 <span class="badge helper">Helper</span></h2>
+      <div class="info-box">注册为附近愿意提供帮助的用户</div>
+
+      <div class="form-group">
+        <label>手机号</label>
+        <input type="text" id="helper-phone" placeholder="例如 13800138000" value="13822220001">
+      </div>
+      <div class="form-group">
+        <label>昵称</label>
+        <input type="text" id="helper-nickname" placeholder="李师傅" value="李师傅">
+      </div>
+      <div class="form-group">
+        <label>当前位置（模拟GPS）</label>
+        <div class="grid-2">
+          <input type="number" id="helper-lat" step="0.0001" value="39.9100">
+          <input type="number" id="helper-lon" step="0.0001" value="116.4100">
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn btn-primary" onclick="registerHelper()">注册帮助者</button>
+        <button class="btn btn-blue" onclick="loginHelper()">已注册?登录</button>
+      </div>
+
+      <div id="helper-section" style="display:none; margin-top:20px;">
+        <div class="info-box success" id="helper-info"></div>
+
+        <h3 style="margin:15px 0 10px; font-size:15px;">📡 在线状态</h3>
+        <div class="row">
+          <button class="btn btn-green" onclick="setHelperOnline()">设为在线</button>
+          <button class="btn btn-gray" onclick="setHelperOffline()">设为离线</button>
+        </div>
+        <div class="info-box" id="helper-status">当前状态：未设置</div>
+
+        <h3 style="margin:15px 0 10px; font-size:15px;">⏱️ 定时位置上报</h3>
+        <div class="row">
+          <button class="btn btn-blue btn-small" onclick="startAutoLocation()">开启定时上报(每10秒)</button>
+          <button class="btn btn-gray btn-small" onclick="stopAutoLocation()">停止</button>
+        </div>
+        <div class="info-box" id="auto-location-status">定时上报：未开启</div>
+
+        <h3 style="margin:20px 0 10px; font-size:15px;">📬 待处理推送消息</h3>
+        <button class="btn btn-warning btn-small" onclick="pollNotifications()">刷新消息</button>
+        <div id="notifications-list" class="list" style="margin-top:10px;"></div>
+
+        <h3 style="margin:20px 0 10px; font-size:15px;">🆘 附近求助</h3>
+        <button class="btn btn-blue btn-small" onclick="refreshHelpRequests()">刷新求助列表</button>
+        <div id="help-requests-list" class="list" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- 紧急联系人/家属端 -->
+    <div class="panel">
+      <h2>家属端 <span class="badge guardian">Guardian</span></h2>
+      <div class="info-box">注册为紧急联系人，用于追踪老年痴呆患者</div>
+
+      <div class="form-group">
+        <label>手机号</label>
+        <input type="text" id="guardian-phone" value="13833330001">
+      </div>
+      <div class="form-group">
+        <label>昵称</label>
+        <input type="text" id="guardian-nickname" value="儿子小明">
+      </div>
+      <div class="row">
+        <button class="btn btn-primary" onclick="registerGuardian()">注册家属</button>
+        <button class="btn btn-blue" onclick="loginGuardian()">已注册?登录</button>
+      </div>
+
+      <div id="guardian-section" style="display:none; margin-top:20px;">
+        <div class="info-box success" id="guardian-info"></div>
+
+        <h3 style="margin:15px 0 10px; font-size:15px;">👨‍👩‍👧 关联患者</h3>
+        <div class="form-group">
+          <label>患者手机号</label>
+          <input type="text" id="bind-seeker-phone" value="13811110001">
+        </div>
+        <div class="form-group">
+          <label>关系</label>
+          <select id="bind-relation">
+            <option>子女</option>
+            <option>亲属</option>
+            <option>邻居</option>
+          </select>
+        </div>
+        <button class="btn btn-green btn-small" onclick="bindSeeker()">建立关联</button>
+
+        <h3 style="margin:20px 0 10px; font-size:15px;">🔍 位置追踪</h3>
+        <button class="btn btn-warning btn-large" onclick="requestTracking()">🚨 请求获取患者当前位置</button>
+        <div class="info-box" id="tracking-result" style="margin-top:10px; min-height:40px;">等待追踪...</div>
+
+        <h3 style="margin:15px 0 10px; font-size:15px;">📟 持续追踪（老年痴呆）</h3>
+        <div class="row">
+          <button class="btn btn-green btn-small" onclick="startContinuousTracking()">开启持续追踪</button>
+          <button class="btn btn-gray btn-small" onclick="stopContinuousTracking()">停止</button>
+        </div>
+        <div class="form-group" style="margin-top:8px;">
+          <label>追踪间隔（秒）</label>
+          <input type="number" id="tracking-interval" value="30">
+        </div>
+
+        <h3 style="margin:15px 0 10px; font-size:15px;">🚧 电子围栏设置</h3>
+        <div class="grid-2">
+          <input type="number" id="fence-lat" step="0.0001" value="39.9042">
+          <input type="number" id="fence-lon" step="0.0001" value="116.4074">
+        </div>
+        <div class="form-group" style="margin-top:8px;">
+          <label>围栏半径（米）</label>
+          <input type="number" id="fence-radius" value="1000">
+        </div>
+        <button class="btn btn-blue btn-small" onclick="updateGeofence()">保存电子围栏</button>
+
+        <h3 style="margin:20px 0 10px; font-size:15px;">📜 位置轨迹</h3>
+        <button class="btn btn-gray btn-small" onclick="loadLocationHistory()">查看最近轨迹</button>
+        <div id="history-list" class="list" style="margin-top:10px;"></div>
+
+        <h3 style="margin:15px 0 10px; font-size:15px;">⚠️ 越界警报记录</h3>
+        <button class="btn btn-gray btn-small" onclick="loadAlerts()">查看警报</button>
+        <div id="alerts-list" class="list" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 全局状态显示 -->
+  <div class="panel" style="margin-top:20px;">
+    <h2>📊 系统状态监控 <span class="badge guardian">Dashboard</span></h2>
+    <div class="row">
+      <div class="info-box">
+        <strong>总用户数:</strong> <span id="stat-users">0</span>
+      </div>
+      <div class="info-box">
+        <strong>求助总数:</strong> <span id="stat-help">0</span>
+      </div>
+      <div class="info-box">
+        <strong>已接单:</strong> <span id="stat-accepted">0</span>
+      </div>
+      <div class="info-box">
+        <strong>推送消息:</strong> <span id="stat-push">0</span>
+      </div>
+    </div>
+    <button class="btn btn-blue btn-small" onclick="loadStats()">刷新统计</button>
+  </div>
+
+</div>
+
+<script>
+const API_BASE = 'http://localhost:8080';
+let seekerToken = null, helperToken = null, guardianToken = null;
+let seekerUser = null, helperUser = null, guardianUser = null;
+let autoLocationTimer = null;
+let pollNotificationTimer = null;
+let pollingHelpTimer = null;
+let currentHelpRequestId = null;
+let patientSeekerId = null;
+
+// ============ 工具函数 ============
+function showNotification(msg, type='success') {
+  const div = document.createElement('div');
+  div.className = 'notification ' + type;
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
+async function apiCall(path, method='GET', body=null, token=null) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  const opts = { method, headers };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API_BASE + path, opts);
+  const data = await res.json();
+  return data;
+}
+
+// ============ 求助者端 ============
+async function registerSeeker() {
+  const res = await apiCall('/api/auth/register', 'POST', {
+    phone: document.getElementById('seeker-phone').value,
+    password: '123456',
+    nickname: document.getElementById('seeker-nickname').value,
+    role: 'seeker',
+    disability_type: document.getElementById('seeker-disability').value,
+    disability_detail: '中度',
+    emergency_contact_name: '儿子小明',
+    emergency_contact_phone: '13833330001',
+    location_auth: 1,
+    auto_consent: 1
+  });
+  if (res.success) {
+    seekerToken = res.token;
+    seekerUser = res.user;
+    document.getElementById('seeker-section').style.display = 'block';
+    document.getElementById('seeker-info').textContent = '✓ ' + res.user.nickname + ' 已登录 (ID: ' + res.user.id.substr(0,8) + ')';
+    showNotification('求助者注册成功！', 'success');
+  } else {
+    showNotification(res.error || '注册失败', 'error');
+  }
+}
+
+async function loginSeeker() {
+  const res = await apiCall('/api/auth/login', 'POST', {
+    phone: document.getElementById('seeker-phone').value,
+    password: '123456'
+  });
+  if (res.success) {
+    seekerToken = res.token;
+    seekerUser = res.user;
+    document.getElementById('seeker-section').style.display = 'block';
+    document.getElementById('seeker-info').textContent = '✓ ' + res.user.nickname + ' 已登录';
+    showNotification('求助者登录成功！', 'success');
+  } else {
+    showNotification(res.error || '登录失败', 'error');
+  }
+}
+
+async function reportSeekerLocation() {
+  const lat = parseFloat(document.getElementById('seeker-lat').value);
+  const lon = parseFloat(document.getElementById('seeker-lon').value);
+  const res = await apiCall('/api/user/location', 'POST', {
+    latitude: lat, longitude: lon, address: '北京市中心', source: 'manual', accuracy: 20
+  }, seekerToken);
+  if (res.success) showNotification('位置已上报', 'success');
+}
+
+async function triggerSOS() {
+  if (!seekerUser) { showNotification('请先注册/登录', 'error'); return; }
+  const lat = parseFloat(document.getElementById('seeker-lat').value);
+  const lon = parseFloat(document.getElementById('seeker-lon').value);
+  const res = await apiCall('/api/help/request', 'POST', {
+    seeker_id: seekerUser.id,
+    latitude: lat, longitude: lon,
+    address: '北京市朝阳区',
+    reason: '摔倒无法起身',
+    disability_type: seekerUser.disability_type,
+    disability_detail: seekerUser.disability_detail,
+    share_phone: 0, seeker_phone: seekerUser.phone
+  }, seekerToken);
+  if (res.success) {
+    currentHelpRequestId = res.help_id;
+    showNotification('SOS已发送！阶段1: 已通知 ' + res.candidates_count + ' 位附近帮助者上报位置', 'info');
+    // 30秒后模拟阶段2
+    setTimeout(async () => {
+      const res2 = await apiCall('/api/help/filter-complete/' + res.help_id, 'POST', null, seekerToken);
+      if (res2.success) {
+        showNotification('阶段2完成：已通知 ' + res2.filtered_count + ' 位距离精确范围内的帮助者', 'info');
+      }
+      loadStats();
+    }, 30000);
+  } else {
+    showNotification(res.error || '发送失败', 'error');
+  }
+}
+
+// ============ 帮助者端 ============
+async function registerHelper() {
+  const res = await apiCall('/api/auth/register', 'POST', {
+    phone: document.getElementById('helper-phone').value,
+    password: '123456',
+    nickname: document.getElementById('helper-nickname').value,
+    role: 'helper'
+  });
+  if (res.success) {
+    helperToken = res.token;
+    helperUser = res.user;
+    document.getElementById('helper-section').style.display = 'block';
+    document.getElementById('helper-info').textContent = '✓ ' + res.user.nickname + ' 已登录';
+    showNotification('帮助者注册成功！', 'success');
+    // 启动定时上报位置
+    startAutoLocation();
+    // 启动推送轮询
+    startPollNotifications();
+  } else {
+    showNotification(res.error || '注册失败', 'error');
+  }
+}
+
+async function loginHelper() {
+  const res = await apiCall('/api/auth/login', 'POST', {
+    phone: document.getElementById('helper-phone').value,
+    password: '123456'
+  });
+  if (res.success) {
+    helperToken = res.token;
+    helperUser = res.user;
+    document.getElementById('helper-section').style.display = 'block';
+    document.getElementById('helper-info').textContent = '✓ ' + res.user.nickname + ' 已登录';
+    showNotification('帮助者登录成功！', 'success');
+    startPollNotifications();
+  } else {
+    showNotification(res.error || '登录失败', 'error');
+  }
+}
+
+async function reportHelperLocation(sourceType='scheduled') {
+  if (!helperUser) return;
+  const lat = parseFloat(document.getElementById('helper-lat').value);
+  const lon = parseFloat(document.getElementById('helper-lon').value);
+  const res = await apiCall('/api/user/location', 'POST', {
+    latitude: lat, longitude: lon,
+    address: '帮助者当前位置',
+    source: sourceType, accuracy: 25
+  }, helperToken);
+  if (res.success && sourceType === 'requested') {
+    showNotification('收到位置请求，已上报位置 ' + lat.toFixed(4) + ',' + lon.toFixed(4), 'info');
+  }
+}
+
+function startAutoLocation() {
+  if (autoLocationTimer) return;
+  autoLocationTimer = setInterval(() => reportHelperLocation('scheduled'), 10000);
+  document.getElementById('auto-location-status').textContent = '定时上报：开启中（每10秒）';
+  reportHelperLocation('scheduled');
+}
+function stopAutoLocation() {
+  if (autoLocationTimer) { clearInterval(autoLocationTimer); autoLocationTimer = null; }
+  document.getElementById('auto-location-status').textContent = '定时上报：停止';
+}
+
+async function setHelperOnline() {
+  const res = await apiCall('/api/helper/status', 'PUT', { status: 'online' }, helperToken);
+  if (res.success) {
+    document.getElementById('helper-status').textContent = '当前状态：在线 ✓';
+    document.getElementById('helper-status').className = 'info-box success';
+    showNotification('已设为在线', 'success');
+  }
+}
+async function setHelperOffline() {
+  const res = await apiCall('/api/helper/status', 'PUT', { status: 'offline' }, helperToken);
+  if (res.success) {
+    document.getElementById('helper-status').textContent = '当前状态：离线';
+    document.getElementById('helper-status').className = 'info-box';
+  }
+}
+
+function startPollNotifications() {
+  if (pollNotificationTimer) return;
+  pollNotificationTimer = setInterval(pollNotifications, 5000);
+  pollNotifications();
+}
+
+async function pollNotifications() {
+  if (!helperUser) return;
+  const res = await apiCall('/api/notifications/' + helperUser.id, 'GET', null, helperToken);
+  if (res.success && res.notifications && res.notifications.length > 0) {
+    const list = document.getElementById('notifications-list');
+    list.innerHTML = '';
+    res.notifications.slice(0, 10).forEach(n => {
+      const item = document.createElement('div');
+      item.className = 'list-item';
+      item.innerHTML = '<strong>[' + n.type + ']</strong> ' + (n.body || n.title || n.data || '') +
+        '<div class="meta">' + n.created_at + '</div>';
+      // 如果是location_request请求，添加响应按钮
+      if (n.type === 'location_request') {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-blue btn-small';
+        btn.style.marginTop = '5px';
+        btn.textContent = '📡 上报位置响应';
+        btn.onclick = () => {
+          const lat = parseFloat(document.getElementById('helper-lat').value);
+          const lon = parseFloat(document.getElementById('helper-lon').value);
+          apiCall('/api/user/location', 'POST', {
+            latitude: lat, longitude: lon, source: 'requested',
+            help_id: JSON.parse(n.data || '{}').help_id, accuracy: 25
+          }, helperToken).then(r => {
+            if (r.success) showNotification('位置已上报到服务器', 'info');
+          });
+        };
+        item.appendChild(btn);
+      }
+      list.appendChild(item);
+    });
+  }
+}
+
+async function refreshHelpRequests() {
+  const lat = parseFloat(document.getElementById('helper-lat').value);
+  const lon = parseFloat(document.getElementById('helper-lon').value);
+  const res = await apiCall('/api/help/nearby?lat=' + lat + '&lon=' + lon + '&radius=5000', 'GET', null, helperToken);
+  const list = document.getElementById('help-requests-list');
+  list.innerHTML = '';
+  if (res.success && res.requests && res.requests.length > 0) {
+    res.requests.forEach(r => {
+      const item = document.createElement('div');
+      item.className = 'list-item';
+      const statusText = r.status === 'accepted' ? '✓ 已被接单' : r.status === 'pending' ? '待接单' : r.status;
+      item.innerHTML = '<strong>🆘 ' + (r.reason || '求助') + '</strong>' +
+        '<div class="meta">求助者: ' + (r.seeker_nickname || '未知') +
+        ' | 残障: ' + (r.disability_type || '未知') +
+        ' | 距离: ~' + (r.distance ? Math.round(r.distance) + '米' : '未知') +
+        ' | 状态: ' + statusText +
+        ' | ' + r.created_at + '</div>';
+      if (r.status === 'pending') {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-green btn-small';
+        btn.style.marginTop = '5px';
+        btn.textContent = '✋ 我来帮助（接单）';
+        btn.onclick = () => acceptHelp(r.id);
+        item.appendChild(btn);
+      }
+      list.appendChild(item);
+    });
+  } else {
+    list.innerHTML = '<div class="list-item">暂无附近求助</div>';
+  }
+}
+
+async function acceptHelp(helpId) {
+  const lat = parseFloat(document.getElementById('helper-lat').value);
+  const lon = parseFloat(document.getElementById('helper-lon').value);
+  const res = await apiCall('/api/help/request/' + helpId + '/accept', 'POST', {
+    helper_id: helperUser.id, latitude: lat, longitude: lon
+  }, helperToken);
+  if (res.success) {
+    showNotification('✓ 接单成功！请前往求助者位置', 'success');
+    refreshHelpRequests();
+  } else {
+    showNotification(res.error || '接单失败', 'error');
+  }
+}
+
+// ============ 家属端 ============
+async function registerGuardian() {
+  const res = await apiCall('/api/auth/register', 'POST', {
+    phone: document.getElementById('guardian-phone').value,
+    password: '123456',
+    nickname: document.getElementById('guardian-nickname').value,
+    role: 'guardian'
+  });
+  if (res.success) {
+    guardianToken = res.token;
+    guardianUser = res.user;
+    document.getElementById('guardian-section').style.display = 'block';
+    document.getElementById('guardian-info').textContent = '✓ ' + res.user.nickname + ' 已登录';
+    showNotification('家属注册成功！', 'success');
+  } else {
+    showNotification(res.error || '注册失败', 'error');
+  }
+}
+
+async function loginGuardian() {
+  const res = await apiCall('/api/auth/login', 'POST', {
+    phone: document.getElementById('guardian-phone').value,
+    password: '123456'
+  });
+  if (res.success) {
+    guardianToken = res.token;
+    guardianUser = res.user;
+    document.getElementById('guardian-section').style.display = 'block';
+    document.getElementById('guardian-info').textContent = '✓ ' + res.user.nickname + ' 已登录';
+    showNotification('家属登录成功！', 'success');
+  } else {
+    showNotification(res.error || '登录失败', 'error');
+  }
+}
+
+async function bindSeeker() {
+  if (!guardianUser) { showNotification('请先登录', 'error'); return; }
+  // 先查询患者ID
+  const phone = document.getElementById('bind-seeker-phone').value;
+  const res = await apiCall('/api/guardian/bind', 'POST', {
+    seeker_phone: phone,
+    relation: document.getElementById('bind-relation').value
+  }, guardianToken);
+  if (res.success) {
+    patientSeekerId = res.seeker_id;
+    showNotification('✓ 已关联患者 ' + (res.seeker_nickname || phone), 'success');
+  } else {
+    showNotification(res.error || '绑定失败', 'error');
+  }
+}
+
+async function requestTracking() {
+  if (!patientSeekerId) { showNotification('请先关联患者', 'error'); return; }
+  const res = await apiCall('/api/track/request/' + patientSeekerId, 'POST', {
+    guardian_id: guardianUser.id
+  }, guardianToken);
+  if (res.success) {
+    document.getElementById('tracking-result').innerHTML =
+      '<strong>📡 位置追踪请求</strong><br>' +
+      '状态: ' + res.tracking.status + '<br>' +
+      '位置: ' + (res.tracking.latitude ? res.tracking.latitude.toFixed(4) + ', ' + res.tracking.longitude.toFixed(4) : '等待响应');
+    showNotification('追踪请求已发送', 'info');
+  }
+}
+
+async function startContinuousTracking() {
+  if (!patientSeekerId) { showNotification('请先关联患者', 'error'); return; }
+  const res = await apiCall('/api/track/start', 'POST', {
+    user_id: patientSeekerId,
+    tracking_interval: parseInt(document.getElementById('tracking-interval').value),
+    continuous_tracking: 1
+  }, guardianToken);
+  if (res.success) showNotification('持续追踪已开启', 'success');
+}
+async function stopContinuousTracking() {
+  if (!patientSeekerId) return;
+  const res = await apiCall('/api/track/stop', 'POST', {
+    user_id: patientSeekerId,
+    continuous_tracking: 0
+  }, guardianToken);
+  if (res.success) showNotification('持续追踪已停止', 'info');
+}
+
+async function updateGeofence() {
+  if (!patientSeekerId) { showNotification('请先关联患者', 'error'); return; }
+  const res = await apiCall('/api/geofence/' + patientSeekerId, 'PUT', {
+    latitude: parseFloat(document.getElementById('fence-lat').value),
+    longitude: parseFloat(document.getElementById('fence-lon').value),
+    radius: parseInt(document.getElementById('fence-radius').value)
+  }, guardianToken);
+  if (res.success) showNotification('电子围栏已更新', 'success');
+}
+
+async function loadLocationHistory() {
+  if (!patientSeekerId) return;
+  const res = await apiCall('/api/history/track/' + patientSeekerId, 'GET', null, guardianToken);
+  const list = document.getElementById('history-list');
+  list.innerHTML = '';
+  if (res.success && res.history && res.history.length > 0) {
+    res.history.slice(0, 15).forEach(h => {
+      const item = document.createElement('div');
+      item.className = 'list-item';
+      item.innerHTML = '<strong>📍 ' + h.latitude.toFixed(4) + ', ' + h.longitude.toFixed(4) + '</strong>' +
+        (h.is_outside_geofence ? ' <span style="color:#e74c3c;">⚠️越界</span>' : '') +
+        '<div class="meta">' + h.created_at + ' | 电量: ' + (h.battery_level || '?') + '% | ' + (h.tracking_mode || '') + '</div>';
+      list.appendChild(item);
+    });
+  } else {
+    list.innerHTML = '<div class="list-item">暂无轨迹记录</div>';
+  }
+}
+
+async function loadAlerts() {
+  if (!patientSeekerId) return;
+  const res = await apiCall('/api/history/alerts/' + patientSeekerId, 'GET', null, guardianToken);
+  const list = document.getElementById('alerts-list');
+  list.innerHTML = '';
+  if (res.success && res.alerts && res.alerts.length > 0) {
+    res.alerts.slice(0, 10).forEach(a => {
+      const item = document.createElement('div');
+      item.className = 'list-item';
+      item.innerHTML = '<strong>⚠️ ' + a.alert_type + '警报</strong>' +
+        '<div class="meta">位置: ' + a.latitude.toFixed(4) + ', ' + a.longitude.toFixed(4) + ' | ' + a.created_at + '</div>';
+      list.appendChild(item);
+    });
+  } else {
+    list.innerHTML = '<div class="list-item">暂无警报记录</div>';
+  }
+}
+
+// ============ 统计 ============
+async function loadStats() {
+  try {
+    const res = await apiCall('/api/stats', 'GET');
+    if (res.success) {
+      document.getElementById('stat-users').textContent = res.stats.total_users;
+      document.getElementById('stat-help').textContent = res.stats.total_help_requests;
+      document.getElementById('stat-accepted').textContent = res.stats.accepted_requests;
+      document.getElementById('stat-push').textContent = res.stats.total_push;
+    }
+  } catch (e) { console.log(e); }
+}
+
+// 启动时加载统计
+loadStats();
+setInterval(loadStats, 15000);
+setInterval(refreshHelpRequests, 15000);
+</script>
+</body>
+</html>
