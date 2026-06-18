@@ -2,6 +2,10 @@
   {
     "user_id": "test-6iin6vug7hemqi0twya",
     "status": "online",
-    "updated_at": "2026-06-17T12:02:17.748Z"
+    "current_plan_id": "sched-work-thu",
+    "current_latitude": 39.9812,
+    "current_longitude": 116.311,
+    "current_address": "北京市海淀区中关村大街1号",
+    "updated_at": "2026-06-18T07:54:11.798Z"
   }
 ]

@@ -1,0 +1,15 @@
+name: helpold_sos
+description: "互助SOS紧急求助平台 - Flutter 客户端"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

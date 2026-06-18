@@ -21,6 +21,7 @@ app.use('/api', require('./routes/auth'));
 app.use('/api', require('./routes/location'));
 app.use('/api', require('./routes/help'));
 app.use('/api', require('./routes/tracking'));
+app.use('/api', require('./routes/helperSchedule'));
 
 // 统计接口
 app.get('/api/stats', (req, res) => {

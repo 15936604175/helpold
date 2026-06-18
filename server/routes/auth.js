@@ -30,9 +30,9 @@ router.post('/register', (req, res) => {
         id, 39.9042, 116.4074);
     }
     if (role === 'helper') {
-      db.prepare(`INSERT INTO helper_status (user_id, status) VALUES (?, ?)`).run(id, 'online');
-      db.prepare(`INSERT INTO user_locations (user_id, latitude, longitude) VALUES (?, ?, ?)`).run(
-        id, 39.9100, 116.4100);
+      // 帮助者注册后默认离线，需在设置页添加位置计划并切换为在线后才能参与求助筛选
+      db.prepare(`INSERT INTO helper_status (user_id, status, updated_at) VALUES (?, ?, ?)`).run(
+        id, 'offline', new Date().toISOString());
     }
     const user = db.prepare('SELECT * FROM users WHERE id = ?').get(id);
     delete user.password;

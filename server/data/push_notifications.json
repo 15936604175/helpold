@@ -1,12 +1,1 @@
-[
-  {
-    "id": "test-lgtgd8zgzucmqi0twyq",
-    "recipient_id": "test-6iin6vug7hemqi0twya",
-    "type": "location_request",
-    "title": "附近有人需要帮助",
-    "body": "请上报您的位置",
-    "data": "{\"help_id\":\"test-ljj2r2sqqd8mqi0twyo\"}",
-    "status": "pending",
-    "created_at": "2026-06-17T12:02:17.762Z"
-  }
-]
+[]
