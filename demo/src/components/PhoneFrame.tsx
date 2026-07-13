@@ -5,18 +5,26 @@ interface PhoneFrameProps {
   statusBarColor?: string;
 }
 
+const PHONE_W = 375;
+const PHONE_H = 812;
+const SCALE = 0.72;
+
 export function PhoneFrame({ children, statusBarColor = '#FFA000' }: PhoneFrameProps) {
   return (
-    <div className="relative mx-auto" style={{ width: '375px' }}>
-      {/* Phone outer frame */}
+    <div className="relative mx-auto origin-top" style={{ width: PHONE_W, height: PHONE_H * SCALE }}>
       <div
-        className="relative overflow-hidden bg-black rounded-[3rem] shadow-2xl"
-        style={{ width: '375px', height: '812px' }}
+        className="relative overflow-hidden bg-black rounded-[3rem] shadow-2xl origin-top-left"
+        style={{
+          width: PHONE_W,
+          height: PHONE_H,
+          transform: `scale(${SCALE})`,
+          borderRadius: `${3 * SCALE}rem`,
+        }}
       >
         {/* Screen */}
         <div
           className="relative overflow-hidden bg-surface"
-          style={{ width: '375px', height: '812px' }}
+          style={{ width: PHONE_W, height: PHONE_H }}
         >
           {/* Dynamic Island / Notch */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 w-[120px] h-[34px] bg-black rounded-b-[18px]" />
@@ -48,7 +56,7 @@ export function PhoneFrame({ children, statusBarColor = '#FFA000' }: PhoneFrameP
           {/* Content Area */}
           <div
             className="overflow-y-auto"
-            style={{ height: 'calc(812px - 44px)', scrollbarWidth: 'none' }}
+            style={{ height: `calc(${PHONE_H}px - 44px)`, scrollbarWidth: 'none' }}
           >
             {children}
           </div>
